@@ -1,0 +1,109 @@
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.register-box {
+    width: 650px;
+    background-color: #f4f4f4;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.lbl {
+    color: black;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.title {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-family: serif;
+}
+
+.input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    background-color: #e8f0fe;
+    box-sizing: border-box;
+}
+
+.btn {
+    background-color: #000000;
+    color: white;
+    padding: 14px 20px;
+    margin-top: 15px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+.btn:hover {
+    background-color: #333333;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 20px;
+    color: #333;
+}
+
+.register-link a {
+    color: #000000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+
+.input-error {
+    border: 1px solid red !important;
+    background-color: #ffe8e8 !important;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.success-msg {
+    color: green;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.error-msg {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}

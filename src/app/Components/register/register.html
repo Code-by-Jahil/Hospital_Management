@@ -1,0 +1,97 @@
+<div class="login-container">
+    <form class="login-box register-box" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <h2 class="title">Register</h2>
+
+        <div class="form-grid">
+
+            <!-- Name -->
+            <div class="form-group">
+                <label class="lbl" for="Username">Name:</label>
+                <input class="input" type="text" id="Username" formControlName="username"
+                    [class.input-error]="username?.invalid && username?.touched" />
+                <span class="error" *ngIf="username?.touched && username?.hasError('required')">
+                    Name is required.
+                </span>
+                <span class="error" *ngIf="username?.touched && username?.hasError('minlength')">
+                    Name must be at least 3 characters.
+                </span>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label class="lbl" for="Email">Email:</label>
+                <input class="input" type="email" id="Email" formControlName="email"
+                    [class.input-error]="email?.invalid && email?.touched" />
+                <span class="error" *ngIf="email?.touched && email?.hasError('required')">
+                    Email is required.
+                </span>
+                <span class="error" *ngIf="email?.touched && email?.hasError('email')">
+                    Enter a valid email address.
+                </span>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label class="lbl" for="password">Password:</label>
+                <input class="input" type="password" id="password" formControlName="password"
+                    [class.input-error]="password?.invalid && password?.touched" />
+                <span class="error" *ngIf="password?.touched && password?.hasError('required')">
+                    Password is required.
+                </span>
+                <span class="error" *ngIf="password?.touched && password?.hasError('minlength')">
+                    Password must be at least 6 characters.
+                </span>
+            </div>
+
+            <!-- Gender -->
+
+            <div class="form-group">
+                <label class="lbl" for="Gender">Gender:</label>
+                <select class="input" id="Gender" formControlName="gender"
+                    [class.input-error]="gender?.invalid && gender?.touched">
+                    <option value="" disabled>Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span class="error" *ngIf="gender?.touched && gender?.hasError('required')">
+                    Please select a gender.
+                </span>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <label class="lbl" for="Phone">Phone:</label>
+                <input class="input" type="tel" id="Phone" formControlName="phone"
+                    [class.input-error]="phone?.invalid && phone?.touched" />
+                <span class="error" *ngIf="phone?.touched && phone?.hasError('required')">
+                    Phone number is required.
+                </span>
+                <span class="error" *ngIf="phone?.touched && phone?.hasError('pattern')">
+                    Enter a valid 10-digit phone number.
+                </span>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label class="lbl" for="Address">Address:</label>
+                <textarea class="input" id="Address" formControlName="address" rows="1"
+                    [class.input-error]="address?.invalid && address?.touched"></textarea>
+                <span class="error" *ngIf="address?.touched && address?.hasError('required')">
+                    Address is required.
+                </span>
+            </div>
+
+        </div>
+
+        <button class="btn" type="submit">Register</button>
+
+        <div class="register-link">
+            <p>Already have an account? <a routerLink="/login">Login</a></p>
+
+            <p class="success-msg" *ngIf="successMessage">{{ successMessage }}</p>
+            <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+        </div>
+
+    </form>
+</div>

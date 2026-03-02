@@ -1,1 +1,209 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* ── Import Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+    --font-primary: 'Nunito', sans-serif;
+    --font-heading: 'Playfair Display', serif;
+
+    --fw-light: 300;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    --fw-extrabold: 800;
+
+    --text-xs: 0.75rem;
+    /* 12px */
+    --text-sm: 0.875rem;
+    /* 14px */
+    --text-base: 1rem;
+    /* 16px */
+    --text-md: 1.125rem;
+    /* 18px */
+    --text-lg: 1.25rem;
+    /* 20px */
+    --text-xl: 1.5rem;
+    /* 24px */
+    --text-2xl: 2rem;
+    /* 32px */
+    --text-3xl: 2.5rem;
+    /* 40px */
+    --text-4xl: 3rem;
+    /* 48px */
+}
+
+/* ── Global Reset + Base ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: var(--fw-regular);
+    line-height: 1.7;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* ── Headings ── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--fw-bold);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+h1 {
+    font-size: var(--text-4xl);
+}
+
+h2 {
+    font-size: var(--text-3xl);
+}
+
+h3 {
+    font-size: var(--text-2xl);
+}
+
+h4 {
+    font-size: var(--text-xl);
+}
+
+h5 {
+    font-size: var(--text-lg);
+}
+
+h6 {
+    font-size: var(--text-md);
+}
+
+/* ── Body Text ── */
+p {
+    font-size: var(--text-base);
+    font-weight: var(--fw-regular);
+    line-height: 1.75;
+}
+
+/* ── Links ── */
+a {
+    font-family: var(--font-primary);
+    font-weight: var(--fw-medium);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* ── Labels & Form Text ── */
+label {
+    font-family: var(--font-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+input,
+textarea,
+select,
+button {
+    font-family: var(--font-primary);
+    font-size: var(--text-base);
+    font-weight: var(--fw-regular);
+}
+
+button {
+    font-weight: var(--fw-semibold);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+}
+
+/* ── Utility Classes ── */
+.text-xs {
+    font-size: var(--text-xs);
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}
+
+.text-base {
+    font-size: var(--text-base);
+}
+
+.text-lg {
+    font-size: var(--text-lg);
+}
+
+.text-xl {
+    font-size: var(--text-xl);
+}
+
+.font-light {
+    font-weight: var(--fw-light);
+}
+
+.font-regular {
+    font-weight: var(--fw-regular);
+}
+
+.font-medium {
+    font-weight: var(--fw-medium);
+}
+
+.font-semibold {
+    font-weight: var(--fw-semibold);
+}
+
+.font-bold {
+    font-weight: var(--fw-bold);
+}
+
+.font-heading {
+    font-family: var(--font-heading);
+}
+
+.font-primary {
+    font-family: var(--font-primary);
+}
+
+.uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.tracking-wide {
+    letter-spacing: 0.08em;
+}
+
+.leading-tight {
+    line-height: 1.2;
+}
+
+.leading-loose {
+    line-height: 1.9;
+}
