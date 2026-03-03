@@ -34,5 +34,9 @@
             <p>Don't have an account? <a routerLink="/register">Register</a></p>
         </div>
 
+        <div>
+            <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+        </div>
+
     </form>
 </div>

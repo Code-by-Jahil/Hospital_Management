@@ -1,0 +1,11 @@
+<div class="app-layout">
+    <app-layout></app-layout>
+
+    <div class="main-wrapper" [class.expanded]="isSidebarCollapsed">
+        <app-header></app-header>
+
+        <main class="content-area">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+.app-layout {
+    display: flex;
+}
+
+.main-wrapper {
+    flex-grow: 1;
+    margin-left: 260px;
+    /* Sidebar width */
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+/* Adjust margin when sidebar is closed */
+.main-wrapper.expanded {
+    margin-left: 70px;
+}
+
+.content-area {
+    padding: 25px;
+}

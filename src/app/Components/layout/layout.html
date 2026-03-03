@@ -1,0 +1,40 @@
+<nav class="sidenav" [class.collapsed]="isCollapsed">
+  <div class="logo">
+    <a routerLink="dashboard" class="logo-link">
+      <h3 class="hms">HMS</h3>
+    </a>
+  </div>
+
+  <ul class="nav-links">
+    <li>
+      <a routerLink="patients" routerLinkActive="active"> <span class="text">Patients</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="appointments" routerLinkActive="active">
+        <span class="text">Appointments</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="doctors" routerLinkActive="active">
+        <span class="text">Doctors</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="billing" routerLinkActive="active">
+        <span class="text">Billing</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="reports" routerLinkActive="active">
+        <span class="text">Reports</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="profile" routerLinkActive="active">
+        <span class="text">Profile</span>
+      </a>
+    </li>
+    
+  </ul>
+</nav>
