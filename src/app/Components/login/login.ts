@@ -32,7 +32,10 @@ export class Login implements OnInit {
     const formData = this.loginForm.value;
     if (this.loginForm.valid) {
       this.auths.login(formData).subscribe({
-        next: (response) => {
+        next: (response: any) => {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('email', response.email);
+          localStorage.setItem('role_name', response.role_name);
           console.log('Login successful:', response);
           this.router.navigate(['/dashboard']);
         },

@@ -8,17 +8,21 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './layout.css',
 })
 export class Layout {
-
-  constructor(private router: Router) { }
-
-  
-  onLogout() {
-    this.router.navigate(['/login']);
-  }
-
   isCollapsed = false;
+  isOpen = false;
+
 
   toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
+    if (window.innerWidth <= 768) {
+      this.isOpen = !this.isOpen;
+    } else {
+      this.isCollapsed = !this.isCollapsed;
+    }
   }
+
+  closeSidebar() {
+    this.isOpen = false;
+  }
+
+
 }

@@ -1,7 +1,10 @@
 <nav class="sidenav" [class.collapsed]="isCollapsed">
   <div class="logo">
     <a routerLink="dashboard" class="logo-link">
-      <h3 class="hms">HMS</h3>
+      <h3 class="hms"><a routerLink="dashboard" routerLinkActive="active"></a>HMS</h3>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        &#9776;
+      </button>
     </a>
   </div>
 
@@ -35,6 +38,7 @@
         <span class="text">Profile</span>
       </a>
     </li>
-    
+
   </ul>
 </nav>
+<div class="backdrop" *ngIf="isOpen" (click)="closeSidebar()"></div>
