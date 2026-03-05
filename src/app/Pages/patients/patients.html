@@ -1,1 +1,251 @@
-<p>patients works!</p>
+<div class="page-wrapper">
+
+    <!-- ── MAIN CONTENT ───────────────────────────────── -->
+    <main class="main-content">
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>Patient Management</h1>
+            </div>
+            <button class="btn-primary" (click)="openAddModal()">
+                + Add Patient
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">🧑‍⚕️</div>
+                <div>
+                    <div class="stat-value">{{ totalCount }}</div>
+                    <div class="stat-label">Total Patients</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">👨</div>
+                <div>
+                    <div class="stat-value">{{ maleCount }}</div>
+                    <div class="stat-label">Male</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon pink">👩</div>
+                <div>
+                    <div class="stat-value">{{ femaleCount }}</div>
+                    <div class="stat-label">Female</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon yellow">🦠</div>
+                <div>
+                    <div class="stat-value">{{ uniqueDiseases }}</div>
+                    <div class="stat-label">Unique Diseases</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="card">
+
+            <!-- Card Header: title + search -->
+            <div class="card-header">
+                <span class="card-title">Patient Records</span>
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <!-- ✅ No ngModel — uses plain event binding -->
+                    <input type="text" [value]="searchQuery" (input)="onSearch($event)"
+                        placeholder="Search patients..." />
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient Name</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th>Diseases</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of pagedPatients">
+                            <td><span class="id-badge">{{ padId(p.id) }}</span></td>
+                            <td>
+                                <div class="patient-name">{{ p.name }}</div>
+                            </td>
+                            <td class="text-muted">{{ p.email }}</td>
+                            <td>
+                                <span class="gender-badge" [ngClass]="p.gender === 'Male' ? 'gender-m' : 'gender-f'">
+                                    {{ p.gender === 'Male' ? '♂' : '♀' }} {{ p.gender }}
+                                </span>
+                            </td>
+                            <td class="nowrap">{{ p.phone }}</td>
+                            <td class="address-cell">{{ p.address }}</td>
+                            <td>
+                                <span class="disease-tag" *ngFor="let d of p.diseases">{{ d }}</span>
+                            </td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="btn-icon btn-edit" title="Edit"
+                                        (click)="openEditModal(p)">✏️</button>
+                                    <button class="btn-icon btn-delete" title="Delete"
+                                        (click)="openDeleteModal(p.id)">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Empty State -->
+                <div class="empty-state" *ngIf="pagedPatients.length === 0">
+                    <div>🔎</div>
+                    <p>No patients found</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-info" *ngIf="filteredPatients.length > 0">
+                    Showing {{ paginationStart }}–{{ paginationEnd }} of {{ filteredPatients.length }} patients
+                </div>
+                <div class="pagination-info" *ngIf="filteredPatients.length === 0">No records</div>
+
+                <div class="page-btns">
+                    <button class="page-btn" (click)="changePage(currentPage - 1)"
+                        [disabled]="currentPage === 1">‹</button>
+                    <button class="page-btn" *ngFor="let page of pageNumbers" [class.active]="page === currentPage"
+                        (click)="changePage(page)">{{ page }}</button>
+                    <button class="page-btn" (click)="changePage(currentPage + 1)"
+                        [disabled]="currentPage === totalPages">›</button>
+                </div>
+            </div>
+
+        </div><!-- /card -->
+    </main>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ADD / EDIT MODAL
+══════════════════════════════════════════════ -->
+<div class="overlay" *ngIf="showFormModal" (click)="closeFormModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <h3>{{ isEditMode ? 'Edit Patient' : 'Add Patient' }}</h3>
+            <button class="modal-close" (click)="closeFormModal()">✕</button>
+        </div>
+
+        <!-- ✅ FormGroup wraps the entire form -->
+        <form [formGroup]="patientForm" (ngSubmit)="isEditMode ? updatePatient() : createPatient()">
+            <div class="modal-body">
+                <div class="form-row">
+
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" formControlName="name" placeholder="e.g. John Doe"
+                            [class.error-input]="isInvalid('name')" />
+                        <span class="error-msg" *ngIf="hasError('name', 'required')">
+                            Full name is required.
+                        </span>
+                        <span class="error-msg" *ngIf="hasError('name', 'minlength')">
+                            Name must be at least 2 characters.
+                        </span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" formControlName="email" placeholder="email@example.com"
+                            [class.error-input]="isInvalid('email')" />
+                        <span class="error-msg" *ngIf="hasError('email', 'required')">
+                            Email is required.
+                        </span>
+                        <span class="error-msg" *ngIf="hasError('email', 'email')">
+                            Invalid email format.
+                        </span>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="form-group">
+                        <label>Gender *</label>
+                        <select formControlName="gender" [class.error-input]="isInvalid('gender')">
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <span class="error-msg" *ngIf="hasError('gender', 'required')">
+                            Gender is required.
+                        </span>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="tel" formControlName="phone" placeholder="+1 800 555 0199"
+                            [class.error-input]="isInvalid('phone')" />
+                        <span class="error-msg" *ngIf="hasError('phone', 'required')">
+                            Phone number is required.
+                        </span>
+                        <span class="error-msg" *ngIf="hasError('phone', 'pattern')">
+                            Invalid phone number.
+                        </span>
+                    </div>
+
+                    <!-- Address (full row) -->
+                    <div class="form-group full">
+                        <label>Address</label>
+                        <input type="text" formControlName="address" placeholder="City, State, Country" />
+                    </div>
+
+                    <!-- Diseases (full row) -->
+                    <div class="form-group full">
+                        <label>Diseases <small>(comma separated)</small></label>
+                        <input type="text" formControlName="diseases" placeholder="e.g. Diabetes, Hypertension" />
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" (click)="closeFormModal()">Cancel</button>
+                <button type="submit" class="btn-primary">
+                    {{ isEditMode ? 'Update Patient' : 'Save Patient' }}
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     DELETE CONFIRM MODAL
+══════════════════════════════════════════════ -->
+<div class="overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal confirm-modal" (click)="$event.stopPropagation()">
+        <div class="confirm-body">
+            <div class="confirm-icon">🗑️</div>
+            <h3>Delete Patient?</h3>
+            <p>This action cannot be undone.<br />The patient record will be permanently removed.</p>
+        </div>
+        <div class="confirm-footer">
+            <button class="btn-cancel" (click)="closeDeleteModal()">Cancel</button>
+            <button class="btn-danger" (click)="confirmDelete()">Yes, Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TOAST NOTIFICATION
+══════════════════════════════════════════════ -->
+<div class="toast" [class.show]="toast.show" [class.success]="toast.type === 'success'"
+    [class.error]="toast.type === 'error'">
+    {{ toast.message }}
+</div>
