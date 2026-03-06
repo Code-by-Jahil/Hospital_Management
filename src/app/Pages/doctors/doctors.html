@@ -1,1 +1,218 @@
-<p>doctors works!</p>
+<div class="page-wrapper">
+    <!-- ── Header ── -->
+    <div class="page-header">
+        <div class="header-left">
+            <div>
+                <h1 class="page-title">Doctors</h1>
+                <p class="page-subtitle">{{ doctors.length }} doctor{{ doctors.length !== 1 ? 's' : '' }} registered</p>
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="openCreateModal()">
+            + Add Doctor
+        </button>
+    </div>
+
+    <!-- ── Table ── -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Gender</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Specialization</th>
+                        <th class="actions-col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let doc of pagedDoctors" class="table-row">
+                        <td><span class="id-badge">#{{ doc.id }}</span></td>
+                        <td>
+                            <div class="name-cell">
+                                <div class="avatar">{{ doc.name.charAt(0) }}</div>
+                                <span class="name-text">{{ doc.name }}</span>
+                            </div>
+                        </td>
+                        <td class="text-muted">{{ doc.email }}</td>
+                        <td>
+                            <span class="gender-badge" [ngClass]="doc.gender.toLowerCase()">{{ doc.gender }}</span>
+                        </td>
+                        <td class="text-muted">{{ doc.phone }}</td>
+                        <td class="text-muted address-cell">{{ doc.address }}</td>
+                        <td>
+                            <span class="spec-badge">{{ doc.specialization }}</span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-icon btn-edit" title="Edit" (click)="openEditModal(doc)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                    </svg>
+                                </button>
+                                <!-- ↓ changed to openDeleteModal -->
+                                <button class="btn-icon btn-delete" title="Delete" (click)="openDeleteModal(doc.id)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6" />
+                                        <path d="M19 6l-1 14H6L5 6" />
+                                        <path d="M10 11v6" />
+                                        <path d="M14 11v6" />
+                                        <path d="M9 6V4h6v2" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="pagedDoctors.length === 0">
+                        <td colspan="8" class="empty-state">No doctors found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ── Pagination ── -->
+        <div class="pagination-wrapper">
+            <span class="pagination-info">
+                Showing {{ (currentPage - 1) * pageSize + 1 }}–{{ Math.min(currentPage * pageSize, doctors.length) }}
+                of {{ doctors.length }}
+            </span>
+            <div class="pagination-controls">
+                <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                </button>
+                <button *ngFor="let p of pages" class="page-btn" [class.active]="p === currentPage"
+                    (click)="goToPage(p)">
+                    {{ p }}
+                </button>
+                <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     Add / Edit Modal
+══════════════════════════════════════════════════ -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <h2 class="modal-title">{{ isEditMode ? 'Edit Doctor' : 'Add New Doctor' }}</h2>
+            <button class="modal-close" (click)="closeModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </button>
+        </div>
+
+        <form [formGroup]="doctorForm" (ngSubmit)="saveDoctor()" class="modal-form" novalidate>
+
+            <!-- Row 1: Name + Email -->
+            <div class="form-row">
+                <div class="form-group" [class.has-error]="isInvalid('name')">
+                    <label class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" class="form-control" formControlName="name" placeholder="Dr. John Doe" />
+                    <span class="error-msg" *ngIf="isInvalid('name')">{{ getError('name') }}</span>
+                </div>
+
+                <div class="form-group" [class.has-error]="isInvalid('email')">
+                    <label class="form-label">Email <span class="required">*</span></label>
+                    <input type="email" class="form-control" formControlName="email" placeholder="doctor@clinic.com" />
+                    <span class="error-msg" *ngIf="isInvalid('email')">{{ getError('email') }}</span>
+                </div>
+            </div>
+
+            <!-- Row 2: Gender + Phone -->
+            <div class="form-row">
+                <div class="form-group" [class.has-error]="isInvalid('gender')">
+                    <label class="form-label">Gender <span class="required">*</span></label>
+                    <select class="form-control" formControlName="gender">
+                        <option value="" disabled>Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span class="error-msg" *ngIf="isInvalid('gender')">{{ getError('gender') }}</span>
+                </div>
+
+                <div class="form-group" [class.has-error]="isInvalid('phone')">
+                    <label class="form-label">Phone <span class="required">*</span></label>
+                    <input type="text" class="form-control" formControlName="phone" placeholder="77777-88888" />
+                    <span class="error-msg" *ngIf="isInvalid('phone')">{{ getError('phone') }}</span>
+                </div>
+            </div>
+
+            <!-- Row 3: Specialization -->
+            <div class="form-row">
+                <div class="form-group" [class.has-error]="isInvalid('specialization')">
+                    <label class="form-label">Specialization <span class="required">*</span></label>
+                    <select class="form-control" formControlName="specialization">
+                        <option value="" disabled>Select specialization</option>
+                        <option *ngFor="let s of specializations" [value]="s">{{ s }}</option>
+                    </select>
+                    <span class="error-msg" *ngIf="isInvalid('specialization')">{{ getError('specialization') }}</span>
+                </div>
+            </div>
+
+            <!-- Row 4: Address -->
+            <div class="form-row">
+                <div class="form-group full-width" [class.has-error]="isInvalid('address')">
+                    <label class="form-label">Address <span class="required">*</span></label>
+                    <input type="text" class="form-control" formControlName="address" placeholder="123 Main St, City" />
+                    <span class="error-msg" *ngIf="isInvalid('address')">{{ getError('address') }}</span>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">
+                    {{ isEditMode ? 'Update Doctor' : 'Add Doctor' }}
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════
+     Delete Confirmation Modal
+══════════════════════════════════════════════════ -->
+<div class="overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal()">
+    <div class="modal confirm-modal" (click)="$event.stopPropagation()">
+        <div class="confirm-body">
+            <div class="confirm-icon">🗑️</div>
+            <h3>Delete Doctor?</h3>
+            <p>This action cannot be undone.<br />The doctor record will be permanently removed.</p>
+        </div>
+        <div class="confirm-footer">
+            <button class="btn-cancel" (click)="closeDeleteModal()">Cancel</button>
+            <button class="btn-danger" (click)="confirmDelete()">Yes, Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     Toast Notification
+══════════════════════════════════════════════ -->
+<div class="toast" [class.show]="toast.show" [class.success]="toast.type === 'success'"
+    [class.error]="toast.type === 'error'">
+    {{ toast.message }}
+</div>
